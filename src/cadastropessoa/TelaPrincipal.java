@@ -6,6 +6,7 @@ package cadastropessoa;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,6 +14,7 @@ import java.util.List;
  */
 public class TelaPrincipal extends javax.swing.JFrame {
     
+    //banco de dados
     private List<Pessoa> listaPessoa = new ArrayList<>();
     
     /**
@@ -20,6 +22,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
      */
     public TelaPrincipal() {
         initComponents();
+        atualizarBaseDados();
+        
+        /*
+        if(Conexao.getConexao() != null){
+            PessoaDAO pessoaDAO = new PessoaDAO();
+            listaPessoa = pessoaDAO.listar();
+        }*/
+            //System.out.println("Conectou!");
+        
     }
 
     /**
@@ -31,14 +42,20 @@ public class TelaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuItem5 = new javax.swing.JMenuItem();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+
+        jMenuItem5.setText("jMenuItem5");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cadastro de Pessoas");
@@ -58,13 +75,21 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jMenu1.setText("Arquivo");
 
-        jMenuItem1.setText("Pessoas");
+        jMenuItem1.setText("Pessoa física");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
             }
         });
         jMenu1.add(jMenuItem1);
+
+        jMenuItem4.setText("Pessoa jurídica");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
 
         jMenuItem2.setText("Endereços");
         jMenu1.add(jMenuItem2);
@@ -79,6 +104,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenu1.add(jMenuItem3);
 
         jMenuBar1.add(jMenu1);
+
+        jMenu3.setText("Listar");
+
+        jMenuItem6.setText("Listar pessoa");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem6);
+
+        jMenuBar1.add(jMenu3);
 
         jMenu2.setText("Sair");
         jMenu2.setToolTipText("Opção de sair da aplicação");
@@ -109,9 +146,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        TelaCadPessoa telaCadPessoa = new TelaCadPessoa(this);
+        TelaCadPessoaFisica telaCadPessoa = new TelaCadPessoaFisica(this);
         jDesktopPane1.add(telaCadPessoa);
         telaCadPessoa.setVisible(true);
+        atualizarBaseDados();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -123,6 +161,25 @@ public class TelaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_jMenu2ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        TelaCadPessoaJuridica telaCadPessoa = new TelaCadPessoaJuridica(this);
+        jDesktopPane1.add(telaCadPessoa);
+        telaCadPessoa.setVisible(true);
+        atualizarBaseDados();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        atualizarBaseDados();
+        List<Pessoa> lstPessoa = getListaPessoa();
+        String texto = "";
+        for(Pessoa p : lstPessoa){
+            //+= ==> texto = texto + concatenar            
+            texto += p.toString() + "\n --------- \n";
+        }
+        JOptionPane.showMessageDialog(null, texto);        
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -163,10 +220,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     // End of variables declaration//GEN-END:variables
 
@@ -180,17 +241,43 @@ public class TelaPrincipal extends javax.swing.JFrame {
     
     public void adicionarPessoaLista(Pessoa pessoa){
         //adicionar na lista
-        this.listaPessoa.add(pessoa);
+        //this.listaPessoa.add(pessoa);
+        if(Conexao.getConexao() != null){
+            PessoaDAO pessoaDAO = new PessoaDAO();            
+            pessoaDAO.inserir(pessoa);
+        }
+        atualizarBaseDados();
     }
 
-    void atualizarPessoaLista(Pessoa pessoa, int posicao) {
+    public void atualizarPessoaLista(Pessoa pessoa, int posicao) {
         //atualizar o objeto na posição X dentro do array
-        this.listaPessoa.set(posicao, pessoa); 
+        //this.listaPessoa.set(posicao, pessoa);
+        if(Conexao.getConexao() != null){
+            PessoaDAO pessoaDAO = new PessoaDAO();
+            //a tela cria um objeto novo (id = 0), então pego o id da pessoa que está na posição
+            pessoa.setId(getListaPessoa().get(posicao).getId());
+            pessoaDAO.atualizar(pessoa);
+        }
+        atualizarBaseDados();
+    }
+
+    public void removerPessoaLista(int posicao) {
+        //remover o objeto na posição X dentro do array
+        //this.listaPessoa.remove(posicao);
+        if(Conexao.getConexao() != null){
+            PessoaDAO pessoaDAO = new PessoaDAO();
+            Pessoa pessoa = getListaPessoa().get(posicao);
+            pessoaDAO.excluir(pessoa);
+        }
+        atualizarBaseDados();
     }
     
-    void excluirPessoaLista(int posicao) {
-        //remove da lista o objeto que está na posição X
-        this.listaPessoa.remove(posicao);
+    public void atualizarBaseDados(){
+        listaPessoa = new ArrayList<>(); //zero a lista e atualizo no banco de dados
+        if(Conexao.getConexao() != null){
+            PessoaDAO pessoaDAO = new PessoaDAO();            
+            listaPessoa = pessoaDAO.listar();
+        }
     }
     
 }

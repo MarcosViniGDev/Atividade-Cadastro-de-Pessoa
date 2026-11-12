@@ -18,6 +18,7 @@ public class CadastroPessoa {
     public static void main(String[] args) {
         // TODO code application logic here
         //JOptionPane.showMessageDialog(null, "Oi!");
+        Conexao.criarBaseDados(); //antes da tela, que já busca as pessoas no banco
         TelaPrincipal telaPrincipal = new TelaPrincipal();
         telaPrincipal.setSize(600,600);
         telaPrincipal.setVisible(true);

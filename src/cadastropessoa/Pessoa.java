@@ -8,19 +8,28 @@ package cadastropessoa;
  *
  * @author Professor
  */
-public class Pessoa {
+public abstract class Pessoa {
     private String nome;
     private String endereco;
     private String email;
+    private Integer id;
 
     public Pessoa(String nome, String endereco, String email) {
         this.nome = nome;
         this.endereco = endereco;
         this.email = email;
+        this.id = 0;
     }
     //criando construtor vazio
     public Pessoa(){}
 
+    public Integer getId(){
+        return this.id;
+    }
+    public void setId(Integer id){
+        this.id = id;
+    }
+    
     public String getNome() {
         return nome;
     }
@@ -44,12 +53,19 @@ public class Pessoa {
     public void setEmail(String email) {
         this.email = email;
     }
+    
+    public abstract String getDocumento();
+    public abstract String getTipoPessoa();
+    public abstract String getNomeFantasia();
 
     @Override
     public String toString() {
-        return "Nome: "     + this.nome     + "\n" +
-               "Endereço: " + this.endereco + "\n" +
-               "E-mail: "   + this.email;
+        return "Tipo: "      + getTipoPessoa() + "\n" +
+               "Nome: "      + this.nome       + "\n" +
+               (getTipoPessoa().equals("Pessoa Jurídica") ? "Nome fantasia: " + getNomeFantasia() + "\n" : "") +
+               "Endereço: "  + this.endereco   + "\n" +
+               "E-mail: "    + this.email      + "\n" +
+               "Documento: " + getDocumento();
     }
     
     
