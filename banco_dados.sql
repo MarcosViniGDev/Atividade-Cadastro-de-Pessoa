@@ -19,6 +19,35 @@ create table pessoa_juridica(
     nome_fantasia VARCHAR(100),
     FOREIGN KEY (pessoa_id) REFERENCES
      pessoa(id) ON DELETE CASCADE);
+     
+create table if not exists produto(
+	id int auto_increment primary key,
+    nome varchar(100) not null,
+    preco decimal(10,2) not null,
+    estoque int not null default 0,
+    fornecedor_id int not null,
+	check (preco > 0),
+    check (estoque >= 0),
+    foreign key (fornecedor_id) references pessoa_juridica(pessoa_id)
+);
+
+create table if not exists venda(
+	id int auto_increment primary key,
+    data_venda datetime not null default current_timestamp,
+    cliente_id int not null,
+    foreign key (cliente_id) references pessoa_fisica(pessoa_id)
+);
+
+create table if not exists item_venda(
+	id int auto_increment primary key,
+    venda_id int not null,
+    produto_id int not null,
+    quantidade int not null,
+    valor_unitario decimal(10,2) not null,
+    check (quantidade > 0),
+    foreign key (venda_id) references venda(id) on delete cascade,
+    foreign key (produto_id) references produto(id)
+);
 
 insert pessoa(nome, endereco, email)
  values('Pessoa1', 'end1','email1');
