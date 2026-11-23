@@ -200,10 +200,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, texto);        
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
-    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Tela de produtos em desenvolvimento");
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {
+    atualizarBaseDados();
+    TelaCadProduto telaCadProduto = new TelaCadProduto(this);
+    jDesktopPane1.add(telaCadProduto);
+    telaCadProduto.setVisible(true);
+}
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         // TODO add your handling code here:
