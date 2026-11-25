@@ -100,7 +100,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItem7);
-        jMenuItem7.getAccessibleContext().setAccessibleName("Produtos");
 
         jMenuItem8.setLabel("Vendas");
         jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
@@ -111,6 +110,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenu1.add(jMenuItem8);
 
         jMenuItem2.setText("Endereços");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem2);
         jMenu1.add(jSeparator1);
 
@@ -209,8 +213,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Tela de Vendas em desenvolvimento");
+        TelaCadVenda telaCadVenda = new TelaCadVenda(this);
+        jDesktopPane1.add(telaCadVenda);
+        telaCadVenda.setVisible(true);
+        telaCadVenda.setVisible(true);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
