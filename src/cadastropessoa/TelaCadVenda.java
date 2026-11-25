@@ -8,11 +8,13 @@ package cadastropessoa;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import java.sql.SQLException;
 
 public class TelaCadVenda extends javax.swing.JInternalFrame {
     private TelaPrincipal telaPrincipal;
     private PessoaDAO pessoaDAO = new PessoaDAO();
     private ProdutoDAO produtoDAO = new ProdutoDAO();
+    private VendaDAO vendaDAO = new VendaDAO();
 
     private List<PessoaFisica> listaClientes = new ArrayList<>();
     private List<Produto> listaProdutos = new ArrayList<>();
@@ -272,7 +274,46 @@ public class TelaCadVenda extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
-        // TODO add your handling code here:
+        PessoaFisica cliente = (PessoaFisica) cbCliente.getSelectedItem();
+
+    if (cliente == null) {
+        JOptionPane.showMessageDialog(this, "Selecione um cliente.");
+        return;
+    }
+
+    if (tabelaItens.getRowCount() == 0) {
+        JOptionPane.showMessageDialog(this, "Adicione pelo menos um produto.");
+        return;
+    }
+
+    Venda venda = new Venda(cliente);
+
+    for (int i = 0; i < tabelaItens.getRowCount(); i++) {
+        Produto produto = (Produto) tabelaItens.getValueAt(i, 0);
+        int quantidade = ((Number) tabelaItens.getValueAt(i, 1)).intValue();
+        double valor = ((Number) tabelaItens.getValueAt(i, 2)).doubleValue();
+
+        venda.getItens().add(new ItemVenda(produto, quantidade, valor));
+    }
+
+    try {
+        vendaDAO.inserir(venda);
+
+        JOptionPane.showMessageDialog(this, "Venda realizada com sucesso!");
+
+        while (tabelaItens.getRowCount() > 0) {
+            ((javax.swing.table.DefaultTableModel) tabelaItens.getModel()).removeRow(0);
+        }
+
+        atualizarTotal();
+        carregarProdutos();
+        txtQuantidaade.setText("");
+        txtValorUnitario.setText("");
+
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this,
+                "Erro ao finalizar venda:\n" + ex.getMessage());
+    }
     }//GEN-LAST:event_btnFinalizarActionPerformed
     
     private void carregarClientes() {
